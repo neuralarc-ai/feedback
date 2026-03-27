@@ -30,14 +30,12 @@ const TOPICS_PRODUCT: TopicItem[] = [
   { name: 'Output Quality', question: 'How satisfied are you with the quality of results produced by the product?' }
 ];
 
-// const SATISFACTION = ['Very Unsatisfied', 'Unsatisfied', 'Neutral', 'Satisfied', 'Very Satisfied'];
 
 export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [overallRating, setOverallRating] = useState(0);
   const [comment, setComment] = useState('');
-  const [satisfaction, setSatisfaction] = useState('');
   const [status, setStatus] = useState<Status>('idle');
   const [touched, setTouched] = useState(false);
 
@@ -50,7 +48,8 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
 
   const nameError = touched && name.trim() === '' ? 'Name is required' : '';
   const emailError = touched && email.trim() === '' ? 'Email is required' : touched && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Enter a valid email' : '';
-  const satisfactionError = touched && !satisfaction ? 'Please select one' : '';
+  const ratedTopicCount = Object.values(topicRatings).filter((v) => v > 0).length;
+  const topicError = touched && ratedTopicCount < 3 ? `We’d love to hear a bit more from you — please rate at least 3 topics.(${ratedTopicCount}/3)` : '';
   const overallError = touched && overallRating === 0 ? 'Please select a rating' : '';
   const commentError = touched && comment.trim() === '' ? 'Comment is required' : '';
 
@@ -61,7 +60,7 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setTouched(true);
-    if (overallRating === 0 || comment.trim() === '' || name.trim() === '' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+    if (overallRating === 0 || comment.trim() === '' || name.trim() === '' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || ratedTopicCount < 3) return;
 
     setStatus('submitting');
     try {
@@ -70,7 +69,6 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
         name: name.trim(),
         email: email.trim(),
         overallRating,
-        satisfaction,
         topicRatings,
         comment: comment.trim(),
         timestamp: new Date().toISOString(),
@@ -85,7 +83,6 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
       setEmail('');
       setOverallRating(0);
       setComment('');
-      setSatisfaction('');
       setTopicRatings(Object.fromEntries(topics.map((t) => [t.name, 0])));
       setTouched(false);
       setTimeout(() => setStatus('idle'), 3000);
@@ -99,9 +96,6 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
     'w-full rounded-lg border border-na-border bg-na-bg px-4 py-3 text-na-white placeholder-na-text-dim text-base outline-none transition-all duration-200 focus:border-na-border-light focus:ring-1 focus:ring-na-border-light/50';
 
   const labelClasses = 'block text-sm font-medium text-na-text-muted mb-2 uppercase tracking-wider';
-
-  // const chipBase = 'px-4 py-2 rounded-full text-sm border cursor-pointer transition-all duration-200';
-  // const chipInactive = 'border-na-border text-na-text-muted hover:border-na-border-light hover:text-na-white';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
@@ -137,40 +131,18 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
         {emailError && <p className="text-error text-sm mt-2 animate-fade-in">{emailError}</p>}
       </div>
 
-      {/* Satisfaction Scale */}
-      <div>
-        {/* <label className={labelClasses}>
-          Satisfaction <span className="text-error">*</span>
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {SATISFACTION.map((level) => (
-            <button
-              key={level}
-              type="button"
-              onClick={() => { setSatisfaction(level); if (!touched) setTouched(true); }}
-              className={`${chipBase} ${
-                satisfaction === level
-                  ? isProduct
-                    ? 'border-he-accent/40 bg-he-accent/10 text-he-accent'
-                    : 'border-na-accent/40 bg-na-accent/10 text-na-white'
-                  : chipInactive
-              }`}
-            >
-              {level}
-            </button>
-          ))}
-        </div> */}
-        {satisfactionError && <p className="text-error text-sm mt-2 animate-fade-in">{satisfactionError}</p>}
-      </div>
 
       {/* Topic Ratings */}
       <div>
-        <label className={labelClasses}>Rate by Topic</label>
-        <div className="space-y-6">
+        <div className="flex items-center gap-2 mb-2">
+          <label className="text-sm font-medium text-na-text-muted uppercase tracking-wider">Rate by Topic</label>
+          {topicError && <span className="text-error text-xs animate-fade-in">— {topicError}</span>}
+        </div>
+        <div className="space-y-3">
           {topics.map((topic) => (
             <div key={topic.name}>
               <span className="text-md font-medium text-na-white">{topic.name}</span>
-              <p className="text-md text-na-text-muted leading-relaxed mt-0.5 mb-2">{topic.question}</p>
+              <p className="text-md text-na-text-muted leading-relaxed mt-0.5 mb-1">{topic.question}</p>
               <EmojiRating rating={topicRatings[topic.name]} onRate={(r) => handleTopicRate(topic.name, r)} />
             </div>
           ))}
@@ -182,8 +154,8 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
         <label className={labelClasses}>
           Overall Rating <span className="text-error">*</span>
         </label>
-        <RatingSlider value={overallRating} onChange={(r) => { setOverallRating(r); setTouched(true); }} />
-        {overallError && <p className="text-error text-sm mt-2 animate-fade-in">{overallError}</p>}
+        <RatingSlider value={overallRating} onChange={(r) => { setOverallRating(r); }} />
+        {overallError && <p className="text-error text-sm mt-3 animate-fade-in">{overallError}</p>}
       </div>
 
       {/* Comment */}
@@ -194,7 +166,7 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
         <textarea
           id={`comment-${type}`}
           value={comment}
-          onChange={(e) => { setComment(e.target.value); if (!touched) setTouched(true); }}
+          onChange={(e) => { setComment(e.target.value); }}
           placeholder="Share your thoughts..."
           rows={4}
           className={`${inputClasses} resize-none`}
@@ -209,7 +181,7 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
           disabled={status === 'submitting'}
           className={`w-1/2 rounded-full font-semibold py-3 px-4 text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-offset-na-surface ${
             isProduct
-              ? 'bg-[#207336] text-white hover:bg-he-accent-dim focus-visible:ring-he-accent/50'
+              ? 'bg-[#207336] text-white hover:bg-[#207336] focus-visible:ring-he-accent/50'
               : 'bg-na-accent text-white hover:bg-na-accent/80 focus-visible:ring-na-accent/50'
           }`}
         >
