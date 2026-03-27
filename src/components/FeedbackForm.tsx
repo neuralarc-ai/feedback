@@ -209,7 +209,7 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
           disabled={status === 'submitting'}
           className={`w-1/2 rounded-full font-semibold py-3 px-4 text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-offset-na-surface ${
             isProduct
-              ? 'bg-he-accent text-white hover:bg-he-accent-dim focus-visible:ring-he-accent/50'
+              ? 'bg-[#207336] text-white hover:bg-he-accent-dim focus-visible:ring-he-accent/50'
               : 'bg-na-accent text-white hover:bg-na-accent/80 focus-visible:ring-na-accent/50'
           }`}
         >

@@ -61,7 +61,7 @@ export default function App() {
         <div className="rounded-2xl overflow-hidden mb-8 border border-na-border">
           <div className="relative p-6">
             <img
-              src="/Frame 58.svg"
+              src="/GRADIEN.png"
               alt=""
               className={`absolute inset-0 w-full h-full object-cover ${activeTab === 'product' ? 'scale-y-[-1]' : ''}`}
               aria-hidden="true"
