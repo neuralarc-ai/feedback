@@ -61,7 +61,7 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setTouched(true);
-    if (overallRating === 0 || comment.trim() === '' || !satisfaction || name.trim() === '' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+    if (overallRating === 0 || comment.trim() === '' || name.trim() === '' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
 
     setStatus('submitting');
     try {

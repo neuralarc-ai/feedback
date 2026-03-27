@@ -1,7 +1,7 @@
 const SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID';
 
-const WEBSITE_TOPICS = ['UI / Visual Design', 'Navigation', 'Content Clarity', 'Performance', 'Responsiveness'];
-const PRODUCT_TOPICS = ['Features', 'Usability', 'Performance', 'Reliability'];
+const WEBSITE_TOPICS = ['UI / Visual Design', 'Navigation', 'Content Clarity', 'Information Structure', 'Responsiveness'];
+const PRODUCT_TOPICS = ['Features', 'User Interface', 'Performance', 'Reliability', 'Output Quality'];
 
 function doPost(e) {
   try {
@@ -38,12 +38,12 @@ function doPost(e) {
       data.name || 'Anonymous',
       data.email || '',
       data.overallRating,
-      data.satisfaction
+      data.satisfaction || ''
     ];
     for (var k = 0; k < topicValues.length; k++) {
       row.push(topicValues[k]);
     }
-    row.push(data.comment);
+    row.push(data.comment || '');
 
     sheet.appendRow(row);
 
