@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react';
-import StarRating from './StarRating';
+import EmojiRating from './EmojiRating';
+import RatingSlider from './RatingSlider';
 
 interface FeedbackFormProps {
   type: 'website' | 'product';
@@ -8,12 +9,32 @@ interface FeedbackFormProps {
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
-const TOPICS_WEBSITE = ['UI/Design', 'Navigation', 'Content', 'Performance', 'Responsiveness'];
-const TOPICS_PRODUCT = ['Features', 'Usability', 'Performance', 'Reliability', 'Documentation'];
-const SATISFACTION = ['Very Unsatisfied', 'Unsatisfied', 'Neutral', 'Satisfied', 'Very Satisfied'];
+interface TopicItem {
+  name: string;
+  question: string;
+}
+
+const TOPICS_WEBSITE: TopicItem[] = [
+  { name: 'UI / Visual Design', question: 'How visually appealing and modern does the website feel?' },
+  { name: 'Navigation', question: 'How easy was it to find what you were looking for?' },
+  { name: 'Content Clarity', question: 'How clear, relevant, and helpful is the content on the website?' },
+  { name: 'Information Structure', question: 'How well is the information organized and structured?' },
+  { name: 'Responsiveness', question: 'How well does the website adapt across devices?' },
+];
+
+const TOPICS_PRODUCT: TopicItem[] = [
+  { name: 'Features', question: 'How useful and relevant are the features provided?' },
+  { name: 'User Interface', question: 'How visually clear and well-designed is the product interface?' },
+  { name: 'Performance', question: 'How reliable and responsive is the product during use?' },
+  { name: 'Reliability', question: 'How consistent and error-free is the product experience?' },
+  { name: 'Output Quality', question: 'How satisfied are you with the quality of results produced by the product?' }
+];
+
+// const SATISFACTION = ['Very Unsatisfied', 'Unsatisfied', 'Neutral', 'Satisfied', 'Very Satisfied'];
 
 export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [overallRating, setOverallRating] = useState(0);
   const [comment, setComment] = useState('');
   const [satisfaction, setSatisfaction] = useState('');
@@ -24,13 +45,14 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
   const topics = isProduct ? TOPICS_PRODUCT : TOPICS_WEBSITE;
 
   const [topicRatings, setTopicRatings] = useState<Record<string, number>>(
-    Object.fromEntries(topics.map((t) => [t, 0]))
+    Object.fromEntries(topics.map((t) => [t.name, 0]))
   );
 
+  const nameError = touched && name.trim() === '' ? 'Name is required' : '';
+  const emailError = touched && email.trim() === '' ? 'Email is required' : touched && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? 'Enter a valid email' : '';
+  const satisfactionError = touched && !satisfaction ? 'Please select one' : '';
   const overallError = touched && overallRating === 0 ? 'Please select a rating' : '';
   const commentError = touched && comment.trim() === '' ? 'Comment is required' : '';
-  const satisfactionError = touched && !satisfaction ? 'Please select one' : '';
-  const nameError = touched && name.trim() === '' ? 'Name is required' : '';
 
   const handleTopicRate = (topic: string, value: number) => {
     setTopicRatings((prev) => ({ ...prev, [topic]: value }));
@@ -39,13 +61,14 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setTouched(true);
-    if (overallRating === 0 || comment.trim() === '' || !satisfaction || name.trim() === '') return;
+    if (overallRating === 0 || comment.trim() === '' || !satisfaction || name.trim() === '' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
 
     setStatus('submitting');
     try {
       const payload = {
         type,
         name: name.trim(),
+        email: email.trim(),
         overallRating,
         satisfaction,
         topicRatings,
@@ -59,10 +82,11 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
       });
       setStatus('success');
       setName('');
+      setEmail('');
       setOverallRating(0);
       setComment('');
       setSatisfaction('');
-      setTopicRatings(Object.fromEntries(topics.map((t) => [t, 0])));
+      setTopicRatings(Object.fromEntries(topics.map((t) => [t.name, 0])));
       setTouched(false);
       setTimeout(() => setStatus('idle'), 3000);
     } catch {
@@ -72,12 +96,12 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
   };
 
   const inputClasses =
-    'w-full rounded-lg border border-na-border bg-na-bg px-4 py-3 text-white placeholder-na-text-dim text-base outline-none transition-all duration-200 focus:border-na-border-light focus:ring-1 focus:ring-na-border-light/50';
+    'w-full rounded-lg border border-na-border bg-na-bg px-4 py-3 text-na-white placeholder-na-text-dim text-base outline-none transition-all duration-200 focus:border-na-border-light focus:ring-1 focus:ring-na-border-light/50';
 
-  const labelClasses = 'block text-sm font-medium text-white mb-2 uppercase tracking-wider';
+  const labelClasses = 'block text-sm font-medium text-na-text-muted mb-2 uppercase tracking-wider';
 
-  const chipBase = 'px-4 py-2 rounded-full text-sm border cursor-pointer transition-all duration-200';
-  const chipInactive = 'border-na-border text-na-text-muted hover:border-na-border-light hover:text-white';
+  // const chipBase = 'px-4 py-2 rounded-full text-sm border cursor-pointer transition-all duration-200';
+  // const chipInactive = 'border-na-border text-na-text-muted hover:border-na-border-light hover:text-na-white';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
@@ -97,18 +121,25 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
         {nameError && <p className="text-error text-sm mt-2 animate-fade-in">{nameError}</p>}
       </div>
 
-      {/* Overall Rating */}
+      {/* Email */}
       <div>
-        <label className={labelClasses}>
-          Overall Rating <span className="text-error">*</span>
+        <label htmlFor={`email-${type}`} className={labelClasses}>
+          Email <span className="text-error">*</span>
         </label>
-        <StarRating rating={overallRating} onRate={(r) => { setOverallRating(r); setTouched(true); }} />
-        {overallError && <p className="text-error text-sm mt-2 animate-fade-in">{overallError}</p>}
+        <input
+          id={`email-${type}`}
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Your email"
+          className={inputClasses}
+        />
+        {emailError && <p className="text-error text-sm mt-2 animate-fade-in">{emailError}</p>}
       </div>
 
       {/* Satisfaction Scale */}
       <div>
-        <label className={labelClasses}>
+        {/* <label className={labelClasses}>
           Satisfaction <span className="text-error">*</span>
         </label>
         <div className="flex flex-wrap gap-2">
@@ -121,28 +152,38 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
                 satisfaction === level
                   ? isProduct
                     ? 'border-he-accent/40 bg-he-accent/10 text-he-accent'
-                    : 'border-na-accent/40 bg-na-accent/10 text-white'
+                    : 'border-na-accent/40 bg-na-accent/10 text-na-white'
                   : chipInactive
               }`}
             >
               {level}
             </button>
           ))}
-        </div>
+        </div> */}
         {satisfactionError && <p className="text-error text-sm mt-2 animate-fade-in">{satisfactionError}</p>}
       </div>
 
       {/* Topic Ratings */}
       <div>
         <label className={labelClasses}>Rate by Topic</label>
-        <div className="space-y-4">
+        <div className="space-y-6">
           {topics.map((topic) => (
-            <div key={topic} className="flex items-center justify-between gap-4">
-              <span className="text-sm text-white min-w-[120px]">{topic}</span>
-              <StarRating rating={topicRatings[topic]} onRate={(r) => handleTopicRate(topic, r)} />
+            <div key={topic.name}>
+              <span className="text-md font-medium text-na-white">{topic.name}</span>
+              <p className="text-md text-na-text-muted leading-relaxed mt-0.5 mb-2">{topic.question}</p>
+              <EmojiRating rating={topicRatings[topic.name]} onRate={(r) => handleTopicRate(topic.name, r)} />
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Overall Rating */}
+      <div>
+        <label className={labelClasses}>
+          Overall Rating <span className="text-error">*</span>
+        </label>
+        <RatingSlider value={overallRating} onChange={(r) => { setOverallRating(r); setTouched(true); }} />
+        {overallError && <p className="text-error text-sm mt-2 animate-fade-in">{overallError}</p>}
       </div>
 
       {/* Comment */}
@@ -162,15 +203,16 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
       </div>
 
       {/* Submit */}
-      <button
-        type="submit"
-        disabled={status === 'submitting'}
-        className={`w-full rounded-lg font-semibold py-3 px-4 text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-offset-na-surface ${
-          isProduct
-            ? 'bg-he-accent/10 text-he-accent border border-he-accent-border hover:bg-he-accent/20 focus-visible:ring-he-accent/50'
-            : 'bg-na-accent/10 text-white border border-na-accent/20 hover:bg-na-accent/20 focus-visible:ring-na-accent/50'
-        }`}
-      >
+      <div className="flex justify-center">
+        <button
+          type="submit"
+          disabled={status === 'submitting'}
+          className={`w-1/2 rounded-full font-semibold py-3 px-4 text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-offset-na-surface ${
+            isProduct
+              ? 'bg-he-accent text-white hover:bg-he-accent-dim focus-visible:ring-he-accent/50'
+              : 'bg-na-accent text-white hover:bg-na-accent/80 focus-visible:ring-na-accent/50'
+          }`}
+        >
         {status === 'submitting' ? (
           <span className="inline-flex items-center gap-2">
             <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
@@ -180,7 +222,8 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
             Submitting...
           </span>
         ) : 'Submit Feedback'}
-      </button>
+        </button>
+      </div>
 
       {status === 'success' && (
         <div className="rounded-lg bg-success-bg border border-success/20 text-success text-base p-4 text-center animate-fade-in">

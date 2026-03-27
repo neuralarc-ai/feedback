@@ -1,34 +1,34 @@
 @import "tailwindcss";
 
 @theme {
-  /* NeuralArc brand colors */
-  --color-na-bg: #050505;
-  --color-na-surface: #0c0c0c;
-  --color-na-surface-hover: #141414;
-  --color-na-border: #1a1a1a;
-  --color-na-border-light: #2a2a2a;
-  --color-na-text: #e5e5e5;
-  --color-na-text-muted: #737373;
-  --color-na-text-dim: #525252;
-  --color-na-white: #fafafa;
+  /* NeuralArc brand colors - Light theme */
+  --color-na-bg: #ffffff;
+  --color-na-surface: #f5f5f5;
+  --color-na-surface-hover: #ebebeb;
+  --color-na-border: #e0e0e0;
+  --color-na-border-light: #d0d0d0;
+  --color-na-text: #1a1a1a;
+  --color-na-text-muted: #6b6b6b;
+  --color-na-text-dim: #999999;
+  --color-na-white: #111111;
 
-  /* NeuralArc Website accent - cool white/silver */
-  --color-na-accent: #d4d4d4;
-  --color-na-accent-glow: rgba(212, 212, 212, 0.08);
+  /* NeuralArc Website accent - dark/charcoal */
+  --color-na-accent: #333333;
+  --color-na-accent-glow: rgba(51, 51, 51, 0.06);
 
   /* Helium AI Product accent - teal/cyan */
-  --color-he-accent: #2dd4bf;
-  --color-he-accent-dim: #14b8a6;
-  --color-he-accent-glow: rgba(45, 212, 191, 0.08);
-  --color-he-accent-border: rgba(45, 212, 191, 0.2);
+  --color-he-accent: #0d9488;
+  --color-he-accent-dim: #0f766e;
+  --color-he-accent-glow: rgba(13, 148, 136, 0.06);
+  --color-he-accent-border: rgba(13, 148, 136, 0.2);
 
   /* Shared */
-  --color-star-active: #facc15;
-  --color-star-inactive: #2a2a2a;
-  --color-success: #22c55e;
-  --color-success-bg: rgba(34, 197, 94, 0.08);
-  --color-error: #ef4444;
-  --color-error-bg: rgba(239, 68, 68, 0.08);
+  --color-star-active: #f59e0b;
+  --color-star-inactive: #d4d4d4;
+  --color-success: #16a34a;
+  --color-success-bg: rgba(22, 163, 74, 0.08);
+  --color-error: #dc2626;
+  --color-error-bg: rgba(220, 38, 38, 0.08);
 }
 
 body {
@@ -38,17 +38,6 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-/* Subtle noise texture overlay */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  opacity: 0.015;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
 }
 
 #root {
@@ -64,7 +53,7 @@ body::before {
   background: var(--color-na-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-na-border-light);
+  background: var(--color-na-border);
   border-radius: 3px;
 }
 
