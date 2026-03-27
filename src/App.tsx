@@ -21,39 +21,56 @@ export default function App() {
         </p>
       </section>
 
-      {/* Tabs */}
-      <div className="flex justify-center px-6 mb-8">
-        <div className="flex bg-[#ececec] rounded-full p-1.5 gap-0">
-          <button
-            type="button"
-            onClick={() => setActiveTab('website')}
-            className={`flex items-center gap-2.5 px-8 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
-              activeTab === 'website'
-                ? 'bg-white text-na-white shadow-sm'
-                : 'text-na-text-muted hover:text-na-white'
-            }`}
-          >
-            <img
-              src="/Neural Arc logomark black.svg"
-              alt=""
-              className="w-8 h-8"
-            />
-            NeuralArc
-          </button>
-          <button
-            type="button"
-            onClick={() => setActiveTab('product')}
-            className={`flex items-center gap-2.5 px-8 py-3 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
-              activeTab === 'product'
-                ? 'bg-white text-na-white shadow-sm'
-                : 'text-na-text-muted hover:text-na-white'
-            }`}
-          >
-            <img src="/helium ai logo.svg" alt="" className="w-5 h-5" />
-            Helium AI
-          </button>
-        </div>
-      </div>
+     {/* Tabs */}
+<div className="flex justify-center px-3 sm:px-6 mb-6 sm:mb-8">
+  <div className="flex bg-[#ececec] rounded-full p-1 gap-1 w-full max-w-[320px] sm:max-w-fit">
+    
+    {/* Website Tab */}
+    <button
+      type="button"
+      onClick={() => setActiveTab('website')}
+      className={`flex items-center justify-center gap-1.5 sm:gap-2.5 
+        px-3 sm:px-6 py-2 sm:py-2.5 
+        rounded-full text-xs sm:text-sm font-medium 
+        transition-all duration-200 cursor-pointer flex-1 sm:flex-none
+        ${
+          activeTab === 'website'
+            ? 'bg-white text-na-white shadow-sm'
+            : 'text-na-text-muted hover:text-na-white'
+        }`}
+    >
+      <img
+        src="/Neural Arc logomark black.svg"
+        alt=""
+        className="w-4 h-4 sm:w-8 sm:h-8"
+      />
+      <span className="truncate">NeuralArc</span>
+    </button>
+
+    {/* Product Tab */}
+    <button
+      type="button"
+      onClick={() => setActiveTab('product')}
+      className={`flex items-center justify-center gap-1.5 sm:gap-2.5 
+        px-3 sm:px-6 py-2 sm:py-2.5 
+        rounded-full text-xs sm:text-sm font-medium 
+        transition-all duration-200 cursor-pointer flex-1 sm:flex-none
+        ${
+          activeTab === 'product'
+            ? 'bg-white text-na-white shadow-sm'
+            : 'text-na-text-muted hover:text-na-white'
+        }`}
+    >
+      <img
+        src="/helium ai logo.svg"
+        alt=""
+        className="w-4 h-4 sm:w-5 sm:h-5"
+      />
+      <span className="truncate">Helium AI</span>
+    </button>
+
+  </div>
+</div>
 
       {/* Centered card + form */}
       <main className="flex-1 max-w-2xl w-full mx-auto px-6 pb-20">

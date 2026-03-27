@@ -18,7 +18,8 @@ export default function RatingSlider({ value, onChange }: RatingSliderProps) {
   };
 
   return (
-    <div className="w-full">
+    <>
+      <div className="w-full">
       {/* Label badge */}
       <div className="flex justify-end mb-3">
         <span className={`px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-200 ${
@@ -54,8 +55,8 @@ export default function RatingSlider({ value, onChange }: RatingSliderProps) {
       <style>{`
         input[type='range']::-webkit-slider-thumb {
           -webkit-appearance: none;
-          width: 28px;
-          height: 28px;
+          width: 24px;
+          height: 24px;
           border-radius: 50%;
           background: #f5d800;
           border: 3px solid #111;
@@ -66,8 +67,8 @@ export default function RatingSlider({ value, onChange }: RatingSliderProps) {
           transform: scale(1.15);
         }
         input[type='range']::-moz-range-thumb {
-          width: 28px;
-          height: 28px;
+          width: 24px;
+          height: 24px;
           border-radius: 50%;
           background: #f5d800;
           border: 3px solid #111;
@@ -75,5 +76,7 @@ export default function RatingSlider({ value, onChange }: RatingSliderProps) {
         }
       `}</style>
     </div>
+    </>
+  
   );
 }
