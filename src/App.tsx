@@ -27,7 +27,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('website')}
-            className={`flex items-center gap-2.5 px-8 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center gap-2.5 px-8 py-2 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
               activeTab === 'website'
                 ? 'bg-white text-na-white shadow-sm'
                 : 'text-na-text-muted hover:text-na-white'
@@ -43,7 +43,7 @@ export default function App() {
           <button
             type="button"
             onClick={() => setActiveTab('product')}
-            className={`flex items-center gap-2.5 px-8 py-3 rounded-full text-sm font-medium transition-all duration-200 ${
+            className={`flex items-center gap-2.5 px-8 py-3 rounded-full text-sm font-medium transition-all duration-200 cursor-pointer ${
               activeTab === 'product'
                 ? 'bg-white text-na-white shadow-sm'
                 : 'text-na-text-muted hover:text-na-white'
