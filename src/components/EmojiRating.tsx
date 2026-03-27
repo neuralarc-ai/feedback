@@ -55,7 +55,7 @@ const blobStyles = `
   width: 42px;
   height: 42px;
   background-color: #fff;
-  border: 1.5px solid #222;
+  border:2px solid #222;
   cursor: pointer;
   position: relative;
   z-index: 1;

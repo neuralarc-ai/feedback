@@ -36,7 +36,7 @@ export default function App() {
             <img
               src="/Neural Arc logomark black.svg"
               alt=""
-              className="w-5 h-5"
+              className="w-8 h-8"
             />
             NeuralArc
           </button>
@@ -61,9 +61,9 @@ export default function App() {
         <div className="rounded-2xl overflow-hidden mb-8 border border-na-border">
           <div className="relative p-6">
             <img
-              src="/GRADIEN.png"
+              src={activeTab === 'product' ? '/pink.png' : '/GRADIEN.png'}
               alt=""
-              className={`absolute inset-0 w-full h-full object-cover ${activeTab === 'product' ? 'scale-y-[-1]' : ''}`}
+              className="absolute inset-0 w-full h-full object-cover"
               aria-hidden="true"
             />
             <div className="relative flex items-center gap-4">
@@ -71,14 +71,14 @@ export default function App() {
                 <img
                   src={activeTab === 'website' ? '/Neural Arc logomark black.svg' : '/helium ai logo.svg'}
                   alt={activeTab === 'website' ? 'NeuralArc logo' : 'Helium AI logo'}
-                  className="w-15 h-16"
+                  className={activeTab === 'website' ? 'w-14 h-14' : 'w-10 h-10'}
                 />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-na-white">
                   {activeTab === 'website' ? 'NeuralArc Website' : 'Helium AI Product'}
                 </h2>
-                <p className="text-sm text-na-text-muted">
+                <p className="text-sm text-na-white">
                   {activeTab === 'website' ? 'neuralarc.ai' : 'he2.ai'}
                 </p>
               </div>
