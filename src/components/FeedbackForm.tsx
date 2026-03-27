@@ -134,10 +134,8 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
 
       {/* Topic Ratings */}
       <div>
-        <div className="flex items-center gap-2 mb-2">
-          <label className="text-sm font-medium text-na-text-muted uppercase tracking-wider">Rate by Topic</label>
-          {topicError && <span className="text-error text-xs animate-fade-in">— {topicError}</span>}
-        </div>
+        <label className={labelClasses}>Rate by Topic</label>
+        {topicError && <p className="text-error text-sm mb-2 animate-fade-in">{topicError}</p>}
         <div className="space-y-3">
           {topics.map((topic) => (
             <div key={topic.name}>
