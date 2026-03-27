@@ -177,10 +177,10 @@ export default function FeedbackForm({ type, scriptUrl }: FeedbackFormProps) {
         <button
           type="submit"
           disabled={status === 'submitting'}
-          className={`w-1/2 rounded-full font-semibold py-3 px-4 text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-offset-na-surface cursor-pointer ${
+          className={`w-full sm:w-1/2 rounded-full font-semibold py-3 px-4 text-base transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-1 focus-visible:ring-offset-1 focus-visible:ring-offset-na-surface cursor-pointer ${
             isProduct
-              ? 'bg-[#207336] text-white hover:bg-[#207336] focus-visible:ring-he-accent/50'
-              : 'bg-na-accent text-white hover:bg-na-accent/80 focus-visible:ring-na-accent/50'
+  ? 'bg-gradient-to-r from-[#FF5BA7] via-[#FF7AC3] to-[#FF99CCCC] text-white hover:opacity-90'
+  : 'bg-gradient-to-r from-[#0091C9] via-[#00B4D8] to-[#48CAE4] text-white hover:opacity-90'
           }`}
         >
         {status === 'submitting' ? (
